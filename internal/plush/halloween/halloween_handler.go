@@ -1,12 +1,14 @@
-package luma
+package halloween
 
 import (
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
 )
 
-const TOKEN = "5363052913:AAFoDDNeTbMoKC0Z1RnkevogUa1s9gOSFWg"
-const BOT_ID = "luma"
+const TOKEN = "5751823423:AAGAItzJXsyETYod5dCGl-slt15P9acbGVY"
+const BOT_ID = "halloween"
+
+const SONG_ID = "AwACAgQAAxkDAAMCY8EsmrvGsd2o5x6LDMGlkiQ3VNEAAp0NAAI8KhBSQq8S8pDfycktBA"
 
 type Handler struct {
 	tg *adapter.TelegramAdapter
@@ -23,13 +25,12 @@ func (h *Handler) Handle(req *types.PlushRequest) (_ *types.PlushRequest, err er
 
 	if req.Type == "random" {
 		err = h.sleep(req.Message.Chat.Id)
-	} else if req.Type == "command" {
-		err = h.rawr(req.Message.Chat.Id, nil)
+	} else if req.Command == "canta" {
+		err = h.sing(req.Message.Chat.Id)
 	}
 
 	return nil, err
 }
-
 func (h *Handler) sleep(chatId int) (err error) {
 	_, err = h.tg.SendMessage(
 		TOKEN, types.TelegramSendMessage{
@@ -41,17 +42,13 @@ func (h *Handler) sleep(chatId int) (err error) {
 	return err
 }
 
-func (h *Handler) rawr(chatId int, replyTo *int) (err error) {
-	payload := types.TelegramSendMessage{
+func (h *Handler) sing(chatId int) (err error) {
+	payload := types.TelegramSendVoice{
 		ChatId: chatId,
-		Text:   RawrGenerator(),
+		Voice:  SONG_ID,
 	}
 
-	if replyTo != nil {
-		payload.ReplyTo = *replyTo
-	}
-
-	_, err = h.tg.SendMessage(TOKEN, payload)
+	err = h.tg.SendVoice(TOKEN, payload)
 
 	return err
 }

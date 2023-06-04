@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "plush-bot.fullname" . }}
+  labels:
+    {{- include "plush-bot.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "plush-bot.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "plush-bot.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "plush-bot.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.plushBot.aws.auth.secret }}
+                  key: {{ .Values.plushBot.aws.auth.accessKeyIdKey }}
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.plushBot.aws.auth.secret }}
+                  key: {{ .Values.plushBot.aws.auth.secretAccessKeyKey }}
+            - name: DYNAMODB_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plush-bot.configMapName" . }}
+                  key: DYNAMODB_REGION
+            - name: DYNAMODB_TABLE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plush-bot.configMapName" . }}
+                  key: DYNAMODB_TABLE
+            - name: RANDOM_MIN_SECONDS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plush-bot.configMapName" . }}
+                  key: RANDOM_MIN_SECONDS
+            - name: RANDOM_MAX_SECONDS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "plush-bot.configMapName" . }}
+                  key: RANDOM_MAX_SECONDS

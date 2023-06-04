@@ -1,32 +1,31 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
+	"net/http"
+	"os"
+
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/plush"
+	"github.com/elizabeth-dev/plush_bot/internal/ports/random"
 	"github.com/elizabeth-dev/plush_bot/internal/ports/telegram"
-	"strings"
 )
 
 func main() {
-	router := plush.NewRouter()
+	telegramAdapter := adapter.NewTelegramAdapter(http.DefaultClient)
+	mySession := session.Must(session.NewSession(
+		aws.NewConfig().WithRegion(os.Getenv("DYNAMODB_REGION")).WithCredentials(credentials.NewEnvCredentials())))
+	svc := dynamodb.New(mySession)
+
+	router := plush.NewRouter(telegramAdapter, svc)
 	telegramHandler := telegram.NewTelegramHandler(router)
 
-	lambda.Start(func(req events.LambdaFunctionURLRequest) (events.LambdaFunctionURLResponse, error) {
-		eventJson, _ := json.MarshalIndent(req, "", "  ")
-		fmt.Printf("EVENT: %s\n", eventJson)
+	go random.NewRandomTimer(svc, &router)
 
-		handler := strings.Split(req.RawPath, "/")[2]
-		fmt.Printf("HANDLER: %s\n", handler)
-
-		switch handler {
-		case "telegram":
-			return telegramHandler.Handle(req)
-		//case "cron":
-		default:
-			return events.LambdaFunctionURLResponse{StatusCode: 200}, nil
-		}
-	})
+	if err := http.ListenAndServe(":8090", telegramHandler); err != nil {
+		panic(err)
+	}
 }

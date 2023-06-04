@@ -1,12 +1,12 @@
-package luma
+package tigris
 
 import (
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
 )
 
-const TOKEN = "5363052913:AAFoDDNeTbMoKC0Z1RnkevogUa1s9gOSFWg"
-const BOT_ID = "luma"
+const TOKEN = "5434967680:AAHvH0jmIa4t-is2GOqyzPnwn7XEHp44OPE"
+const BOT_ID = "tigris"
 
 type Handler struct {
 	tg *adapter.TelegramAdapter
@@ -23,8 +23,6 @@ func (h *Handler) Handle(req *types.PlushRequest) (_ *types.PlushRequest, err er
 
 	if req.Type == "random" {
 		err = h.sleep(req.Message.Chat.Id)
-	} else if req.Type == "command" {
-		err = h.rawr(req.Message.Chat.Id, nil)
 	}
 
 	return nil, err
@@ -37,21 +35,6 @@ func (h *Handler) sleep(chatId int) (err error) {
 			Text:   "zzZZzzZZzzZZ",
 		},
 	)
-
-	return err
-}
-
-func (h *Handler) rawr(chatId int, replyTo *int) (err error) {
-	payload := types.TelegramSendMessage{
-		ChatId: chatId,
-		Text:   RawrGenerator(),
-	}
-
-	if replyTo != nil {
-		payload.ReplyTo = *replyTo
-	}
-
-	_, err = h.tg.SendMessage(TOKEN, payload)
 
 	return err
 }

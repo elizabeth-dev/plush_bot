@@ -1,0 +1,69 @@
+# Default values for plush-bot.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+plushBot:
+  aws:
+    auth:
+      secret: ""
+      secretAccessKeyKey: "AWS_SECRET_ACCESS_KEY"
+      accessKeyIdKey: "AWS_ACCESS_KEY_ID"
+  config:
+    dynamodbRegion: ""
+    dynamodbTable: ""
+    randomMinSeconds: 14400
+    randomMaxSeconds: 21600
+
+replicaCount: 1
+
+image:
+  repository: public.ecr.aws/s1m7q0k0/plush-bot
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+configMap:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8090
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+resources: {}

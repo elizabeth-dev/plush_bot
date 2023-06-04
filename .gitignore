@@ -103,3 +103,5 @@ go.work
 
 # Ignore build folder
 .aws-sam/
+
+*.tgz

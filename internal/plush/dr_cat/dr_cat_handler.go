@@ -1,12 +1,13 @@
-package luma
+package dr_cat
 
 import (
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
+	"math/rand"
 )
 
-const TOKEN = "5363052913:AAFoDDNeTbMoKC0Z1RnkevogUa1s9gOSFWg"
-const BOT_ID = "luma"
+const TOKEN = "5825383094:AAEsJbI6H7W-2-fVHQ0Uk-osy9LoZpDS9wE"
+const BOT_ID = "dr_cat"
 
 type Handler struct {
 	tg *adapter.TelegramAdapter
@@ -22,9 +23,18 @@ func (h *Handler) Handle(req *types.PlushRequest) (_ *types.PlushRequest, err er
 	}
 
 	if req.Type == "random" {
-		err = h.sleep(req.Message.Chat.Id)
-	} else if req.Type == "command" {
-		err = h.rawr(req.Message.Chat.Id, nil)
+		num := rand.Intn(2)
+		if num == 0 {
+			err = h.sleep(req.Message.Chat.Id)
+		} else {
+			err = h.terminal(req.Message.Chat.Id)
+		}
+	}
+
+	if req.Type == "command" {
+		if req.Command == "consejo" {
+			err = h.advice(req.Message.Chat.Id)
+		}
 	}
 
 	return nil, err
@@ -41,14 +51,21 @@ func (h *Handler) sleep(chatId int) (err error) {
 	return err
 }
 
-func (h *Handler) rawr(chatId int, replyTo *int) (err error) {
+func (h *Handler) terminal(chatId int) (err error) {
+	_, err = h.tg.SendMessage(
+		TOKEN, types.TelegramSendMessage{
+			ChatId: chatId,
+			Text:   "It's terminal",
+		},
+	)
+
+	return err
+}
+
+func (h *Handler) advice(chatId int) (err error) {
 	payload := types.TelegramSendMessage{
 		ChatId: chatId,
-		Text:   RawrGenerator(),
-	}
-
-	if replyTo != nil {
-		payload.ReplyTo = *replyTo
+		Text:   MEDICAL_ADVICE[rand.Intn(len(MEDICAL_ADVICE))],
 	}
 
 	_, err = h.tg.SendMessage(TOKEN, payload)

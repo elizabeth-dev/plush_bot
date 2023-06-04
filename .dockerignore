@@ -1,0 +1,7 @@
+Dockerfile
+Makefile
+plush.db
+.idea
+plush_bot.iml
+.gitpod.yml
+.gitpod.Dockerfile
