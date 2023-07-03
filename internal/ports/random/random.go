@@ -54,28 +54,32 @@ func NewRandomTimer(db *dynamodb.DynamoDB, router *plush.Router) {
 
 			chatBots[chatId] = []string{}
 
-			for _, bot := range chat["bots"].L {
-				chatBots[chatId] = append(chatBots[chatId], *bot.S)
+			if chat["bots"] != nil {
+				for _, bot := range chat["bots"].SS {
+					chatBots[chatId] = append(chatBots[chatId], *bot)
+				}
 			}
 		}
 
 		fmt.Printf("PARSED CHATBOTS: %v\n", chatBots)
 
 		for chatId, bots := range chatBots {
-			router.Handle(
-				&types.PlushRequest{
-					BotId: bots[rand.Intn(len(bots))],
-					Type:  "random",
-					Message: types.PlushMessage{
-						Chat: struct {
-							Id    int
-							Title string
-						}{
-							Id: chatId,
+			if len(bots) > 0 {
+				router.Handle(
+					&types.PlushRequest{
+						BotId: bots[rand.Intn(len(bots))],
+						Type:  "random",
+						Message: types.PlushMessage{
+							Chat: struct {
+								Id    int
+								Title string
+							}{
+								Id: chatId,
+							},
 						},
 					},
-				},
-			)
+				)
+			}
 		}
 	}
 }

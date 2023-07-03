@@ -1,12 +1,13 @@
 package trio_calavera
 
 import (
+	"math/rand"
+
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
-	"math/rand"
 )
 
-const TOKEN = "5948803373:AAF7IrMFCjmzi-Pkodxbgj29bflTSv0cpb0"
+const TOKEN = ""
 const BOT_ID = "trio_calavera"
 
 type Handler struct {

@@ -1,13 +1,14 @@
 package jack
 
 import (
+	"time"
+
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/plush/sr_juan"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
-	"time"
 )
 
-const TOKEN = "5818521061:AAEA7C-qugytp9cyUUhh2gxiok6sRDb1718"
+const TOKEN = ""
 const BOT_ID = "jack"
 
 type Handler struct {

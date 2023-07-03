@@ -5,7 +5,7 @@ import (
 	"github.com/elizabeth-dev/plush_bot/internal/types"
 )
 
-const TOKEN = "5913311588:AAHMfWXAbu0jr7yx3Kf4bDDdk05UHFEax6Q"
+const TOKEN = ""
 const BOT_ID = "horrifido"
 
 const SONG_ID = "AwACAgQAAxkDAAMCY8DPOhudQmLO4tSkYHwqEwpWv5YAAmgPAAI8KghSxxlY4j6upRMtBA"

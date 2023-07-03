@@ -1,12 +1,13 @@
 package liz
 
 import (
+	"math/rand"
+
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
-	"math/rand"
 )
 
-const TOKEN = "5666394080:AAFgSXHhVPuVJCJY7cdGscCu6nWl7mNXH_M"
+const TOKEN = ""
 const BOT_ID = "liz"
 
 type Handler struct {

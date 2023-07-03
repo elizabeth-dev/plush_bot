@@ -1,12 +1,13 @@
 package dr_cat
 
 import (
+	"math/rand"
+
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
-	"math/rand"
 )
 
-const TOKEN = "5825383094:AAEsJbI6H7W-2-fVHQ0Uk-osy9LoZpDS9wE"
+const TOKEN = ""
 const BOT_ID = "dr_cat"
 
 type Handler struct {

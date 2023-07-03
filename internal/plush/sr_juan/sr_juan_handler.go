@@ -2,13 +2,14 @@ package sr_juan
 
 import (
 	"fmt"
-	"github.com/elizabeth-dev/plush_bot/internal/adapter"
-	"github.com/elizabeth-dev/plush_bot/internal/types"
 	"strings"
 	"time"
+
+	"github.com/elizabeth-dev/plush_bot/internal/adapter"
+	"github.com/elizabeth-dev/plush_bot/internal/types"
 )
 
-const TOKEN = "5753359868:AAGlA6Y1cSjEdCS0Ik-WSPoOQkiqD3geggA"
+const TOKEN = ""
 const BOT_ID = "sr_juan"
 
 type Handler struct {

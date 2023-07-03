@@ -5,7 +5,7 @@ import (
 	"github.com/elizabeth-dev/plush_bot/internal/types"
 )
 
-const TOKEN = "5434967680:AAHvH0jmIa4t-is2GOqyzPnwn7XEHp44OPE"
+const TOKEN = ""
 const BOT_ID = "tigris"
 
 type Handler struct {

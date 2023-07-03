@@ -1,12 +1,13 @@
 package portazgo
 
 import (
+	"strings"
+
 	"github.com/elizabeth-dev/plush_bot/internal/adapter"
 	"github.com/elizabeth-dev/plush_bot/internal/types"
-	"strings"
 )
 
-const TOKEN = "5180033899:AAFvGFEONm6GHLMpk8xhvAOieqoJjBBLGkM"
+const TOKEN = ""
 const BOT_ID = "portazgo"
 
 const PASSWORD = "miau"
